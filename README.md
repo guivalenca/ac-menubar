@@ -162,6 +162,7 @@ descoberta mostra os envios e respostas.
 | `tools/make_icon.swift` | Gera o ícone e a marca em `Resources/Brand` |
 | `tools/screenshots.sh` | Gera as imagens deste README em `docs/screenshots` |
 | `scripts/build-app.sh` | Compila, nomeia, assina e instala o app |
+| `THIRD_PARTY_NOTICES.md` | Aviso de copyright e licença (MIT) do msmart-ng |
 | `DESIGN.md` | Guia de design: componentes, estados, textos, comportamento na barra de menus e regras de desempenho |
 
 Para regenerar os vetores de teste:
@@ -176,5 +177,9 @@ nem rede. Depois de mudar o visual, rode `tools/screenshots.sh` para atualizar a
 
 ## Créditos
 
-O protocolo em `MideaKit` e os vetores de teste vêm do
-[msmart-ng](https://github.com/mill1000/midea-msmart), de mill1000, distribuído sob a licença MIT.
+O protocolo em `MideaKit` é um port do [msmart-ng](https://github.com/mill1000/midea-msmart), de
+Tucker Kern (mill1000) e colaboradores, distribuído sob a licença MIT; o aviso de copyright e a licença
+estão em [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Os vetores de teste também vêm do msmart-ng.
+
+Projeto independente, sem vínculo com a Midea ou a Springer. Midea, Springer Midea e SmartHome são
+marcas dos respectivos donos. Use por sua conta e risco.

@@ -1,0 +1,13 @@
+.build/
+build/
+.swiftpm/
+*.xcodeproj
+xcuserdata/
+.DS_Store
+
+# Device data: tokens, keys and captures stay out of git.
+config.json
+*.capture.json
+capture*.json
+sala*.json
+*candidates*.json

@@ -1,0 +1,135 @@
+{
+ "crc8": {
+  "data": "000306090c0f1215181b1e212427",
+  "crc": 211,
+  "checksum": 239
+ },
+ "get_state": "aa21ac00000000000003418100ff03ff00020000000000000000000000000311f463",
+ "set_state": [
+  {
+   "input": {
+    "power_on": true,
+    "target_temperature": 22.0,
+    "operational_mode": 2,
+    "fan_speed": 102,
+    "swing_mode": 0,
+    "eco": false,
+    "turbo": false,
+    "sleep": false,
+    "beep_on": true
+   },
+   "bytes": "aa24ac00000000000002404346667f7f00300000000000000000000000280000000021dfa9"
+  },
+  {
+   "input": {
+    "power_on": false,
+    "target_temperature": 16.0,
+    "operational_mode": 3,
+    "fan_speed": 40,
+    "swing_mode": 12,
+    "eco": true,
+    "turbo": false,
+    "sleep": true,
+    "beep_on": false
+   },
+   "bytes": "aa24ac00000000000002400260287f7f003c0080010000000000000004280000000021cb91"
+  },
+  {
+   "input": {
+    "power_on": true,
+    "target_temperature": 24.5,
+    "operational_mode": 5,
+    "fan_speed": 80,
+    "swing_mode": 15,
+    "eco": false,
+    "turbo": true,
+    "sleep": false,
+    "beep_on": true
+   },
+   "bytes": "aa24ac000000000000024043b8507f7f003f20000200000000000000002800000000216596"
+  },
+  {
+   "input": {
+    "power_on": true,
+    "target_temperature": 30.0,
+    "operational_mode": 1,
+    "fan_speed": 60,
+    "swing_mode": 3,
+    "eco": false,
+    "turbo": false,
+    "sleep": false,
+    "beep_on": false
+   },
+   "bytes": "aa24ac0000000000000240032e3c7f7f00330000000000000000000000280000000021cd3a"
+  }
+ ],
+ "aes_ecb": {
+  "plain": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f2021222324",
+  "cipher": "570e44c8d6bfb83a6d6c8cfc72ac330c422135c716a59961b823b48fb3fc8c366c000b36d321f64ef33d0999280b1a66"
+ },
+ "sign": {
+  "data": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f2021222324",
+  "md5": "828421706508f3336418a6d5a6d23316"
+ },
+ "udpid": {
+  "id": 18838586676582,
+  "little": "e31a63501976a76b9b34df8517265e78",
+  "big": "5870f5b4a06c0d6f8e6263bcc7772ffe"
+ },
+ "packet": {
+  "id": 18838586676582,
+  "timestamp": "0c223815120a1a14",
+  "frame": "aa21ac00000000000003418100ff03ff00020000000000000000000000000311f463",
+  "packet": "5a5a011168002000000000000c223815120a1a14665544332211000000000000000000000000000065cd8728fc6a5d31e6464235e81fa3b3248a851aa2983f2c704dbd39a1d41abafddee24f2445736fab177474426c4f64c0fb11ffd08d9bb0d727071a38646224"
+ },
+ "v3_handshake": {
+  "packet_id": 0,
+  "token": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+  "packet": "8370004020000000000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f"
+ },
+ "v3_encrypted": {
+  "packet_id": 5,
+  "local_key": "6465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f80818283",
+  "data": "5a5a011168002000000000000c223815120a1a14665544332211000000000000000000000000000065cd8728fc6a5d31e6464235e81fa3b3248a851aa2983f2c704dbd39a1d41abafddee24f2445736fab177474426c4f64c0fb11ffd08d9bb0d727071a38646224",
+  "packet": "8370008e20661fb39a40638f20d211c463fdfc27b45034601bdda03faa2fc77230bf71f29c83e557680b9c62785b67887836c68a01a29614019db6c71e94dd245a5df2c9a8ccef48b58ee75fe7134751b212488e88635c7052dff936c1c55632c6b0572e969c32cba139699b29b3377c09aa4aaa9de865b0b91f50a34bd99cb196dafde89aec2dc6e377bb52fcabf16a6e9ff0343137"
+ },
+ "v3_response": {
+  "local_key": "6465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f80818283",
+  "packet": "8370008e20635678018a72636dca1b91d6e0b77ebf049f546b5ff7951213f63263366da8bd4116c23f0f04f22639e2983d164677b4431660bd86e1d31016b0c5b07bbfbd5376d01a7b4af6902f0669114e8a27f300dcb0eb0965e3592c01f41c5588cfb4a773763395ff1b83b8cabcbf3e81c7924995d3717c2173c3e2e1619604c1d8825660373533286c2ae91d8d434149a4b1ef69",
+  "payload": "5a5a011168002000000000000c223815120a1a14665544332211000000000000000000000000000065cd8728fc6a5d31e6464235e81fa3b3248a851aa2983f2c704dbd39a1d41abafddee24f2445736fab177474426c4f64c0fb11ffd08d9bb0d727071a38646224"
+ },
+ "local_key": {
+  "cloud_key": "c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7",
+  "handshake_payload": "b350a4c89afaf38c2b26e1c53a73e255d9e5384412b00950362fc9a9324a2371ae216c2ef5247a3782c135efa279a3e4cdc61094270f5d2be58c6204b7a612c9",
+  "local_key": "c9cbc9cfc9cbc9c7d9dbd9dfd9dbd9c7c9cbc9cfc9cbc9c7f9fbf9fff9fbf9c7"
+ },
+ "state_response": {
+  "frame": "aa22ac00000000000303c00041667f7f00300000005d56000000000000000000699dde",
+  "parsed": {
+   "power_on": false,
+   "target_temperature": 17.0,
+   "operational_mode": 2,
+   "fan_speed": 102,
+   "swing_mode": 0,
+   "turbo": false,
+   "eco": false,
+   "sleep": false,
+   "fahrenheit": false,
+   "indoor_temperature": 21.5,
+   "outdoor_temperature": 18.0,
+   "display_on": true,
+   "error_code": 0
+  }
+ },
+ "discovery_reply": {
+  "packet": "837000c8200f00005a5a0111b8007a80000000000c223815120a1a14665544332211000000000000000000000000000059e663867871ec503eb9b5ba5acb97504ecd6137c51c91cbaf32fd927ecd8aa66cf91ce7ef77ea29fa84aa74f3f756e1b52e6b28bc359aed3442ea2c036961bf4bdfb3e16e33d88768cc4c3d0658937d4bdfb3e16e33d88768cc4c3d0658937d4bdfb3e16e33d88768cc4c3d0658937d0bb19369bf0317b24d3a4de9e6a13106e17caee20caa7935a9aee62b6df118135870f5b4a06c0d6f8e6263bcc7772ffe",
+  "parsed": {
+   "ip": "192.0.2.50",
+   "port": 6444,
+   "id": 18838586676582,
+   "name": "net_ac_FAKE",
+   "serial": "000000000000000000000000FAKE0001",
+   "version": 3
+  }
+ }
+}

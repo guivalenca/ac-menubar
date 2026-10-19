@@ -1,13 +1,25 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="Resources/Brand/png/wordmark-dark@2x.png">
-    <img src="Resources/Brand/png/wordmark@2x.png" width="420" alt="GuiCondicionado">
+    <img src="Resources/Brand/png/wordmark@2x.png" width="420" alt="ac-menubar">
   </picture>
 </p>
 
-GuiCondicionado é um app de barra de menus para macOS que controla um ar-condicionado Midea pela rede
-local. Ele fala direto com o aparelho pelo protocolo LAN V3 da Midea, sem depender da nuvem no uso do
-dia a dia. A conta SmartHome entra só uma vez, para obter o token e a chave do aparelho.
+ac-menubar é um app de barra de menus para macOS que controla um ar-condicionado Midea pela rede local.
+Ele fala direto com o aparelho pelo protocolo LAN V3 da Midea, sem depender da nuvem no uso do dia a
+dia. A conta SmartHome entra só uma vez, para obter o token e a chave do aparelho. Cada pessoa pode dar
+o próprio nome ao app (veja [Dê o seu nome ao app](#dê-o-seu-nome-ao-app)).
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/ligado-escuro.png">
+    <img src="docs/screenshots/ligado.png" width="400" alt="Painel com o ar ligado: temperatura alvo de 21°, modo Refrigerar, ventilação automática, direção do ar vertical e Eco ligado">
+  </picture>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/desligado-escuro.png">
+    <img src="docs/screenshots/desligado.png" width="400" alt="Painel com o ar desligado: os controles ficam apagados até ligar">
+  </picture>
+</p>
 
 ## Recursos
 
@@ -18,7 +30,7 @@ dia a dia. A conta SmartHome entra só uma vez, para obter o token e a chave do 
   sem janelas nem alertas.
 - O item só aparece na barra de menus quando o Mac está na mesma rede do aparelho, ou quando há algo
   a resolver, como a permissão de Rede Local.
-- Bipe do aparelho opcional, interface em português e sem ícone no Dock.
+- Tema claro e escuro, bipe do aparelho opcional, interface em português e sem ícone no Dock.
 
 ## Requisitos
 
@@ -33,17 +45,40 @@ dia a dia. A conta SmartHome entra só uma vez, para obter o token e a chave do 
 scripts/build-app.sh --install
 ```
 
-O script compila em modo release, monta e assina (ad hoc) o `GuiCondicionado.app`, copia para
-`~/Applications` e abre o app. Sem `--install`, só gera o app e mostra o caminho.
+O script compila em modo release, monta e assina (ad hoc) o app, copia para `~/Applications` e abre o
+app. Sem `--install`, só gera o app e mostra o caminho.
 
-Os arquivos de build ficam em `~/Library/Caches/guicondicionado-build`, fora do repositório. Se o
-projeto estiver na Mesa sincronizada pelo iCloud, um `.build` dentro dele quebraria a assinatura (o
-iCloud adiciona metadados do Finder aos arquivos) e faria o iCloud sincronizar centenas de MB. Pelo
-mesmo motivo, use um `--scratch-path` fora do repositório ao rodar `swift build` ou `swift test`:
+Os arquivos de build ficam em `~/Library/Caches/ac-menubar-build`, fora do repositório. Se o projeto
+estiver na Mesa sincronizada pelo iCloud, um `.build` dentro dele quebraria a assinatura (o iCloud
+adiciona metadados do Finder aos arquivos) e faria o iCloud sincronizar centenas de MB. Pelo mesmo
+motivo, use um `--scratch-path` fora do repositório ao rodar `swift build` ou `swift test`:
 
 ```sh
-swift test --scratch-path ~/Library/Caches/guicondicionado-build
+swift test --scratch-path ~/Library/Caches/ac-menubar-build
 ```
+
+## Dê o seu nome ao app
+
+Sem configuração, o app se chama **ac-menubar**. Para usar outro nome, passe `--name` uma vez:
+
+```sh
+scripts/build-app.sh --name "GuiCondicionado" --install
+```
+
+O nome aparece no menu de ajustes ("Sair do GuiCondicionado"), no Monitor de Atividade, nos pedidos de
+permissão do macOS e no próprio app em `~/Applications/GuiCondicionado.app`. Ele fica salvo em
+`~/.config/ac-menubar/app.env`, fora do repositório, e vale para as próximas compilações:
+
+```sh
+APP_NAME=GuiCondicionado
+# Opcional; o padrão é local.ac-menubar.<nome>.
+BUNDLE_ID=com.seunome.guicondicionado
+```
+
+O macOS liga a permissão de Rede Local e o "Abrir ao iniciar o Mac" ao `BUNDLE_ID`. Sem ele, trocar o
+nome muda o identificador e o macOS pede a permissão de novo. Para trocar de nome sem perder as
+permissões, fixe o `BUNDLE_ID` no arquivo. Ao trocar de nome, feche e apague o app com o nome antigo
+em `~/Applications`.
 
 ## Obter o token e a chave
 
@@ -83,12 +118,14 @@ O arquivo fica fora do repositório e nunca deve ser versionado. O `.gitignore` 
 `config.json` e arquivos de captura (`*.capture.json`, `capture*.json`, `sala*.json`,
 `*candidates*.json`), para o caso de alguém salvar uma cópia dentro do projeto.
 
+O app registra o que acontece na rede em `~/Library/Logs/ac-menubar.log`.
+
 ## Permissão de Rede Local
 
-Na primeira conexão, o macOS pergunta se o GuiCondicionado pode encontrar e se conectar a
-dispositivos na rede local. Permita. Se a permissão for negada, o app explica o bloqueio no painel;
-para liberar, ative o GuiCondicionado em Ajustes do Sistema → Privacidade e Segurança → Rede Local.
-Ao usar o `actool` ou o script de token, a permissão vale para o app de terminal.
+Na primeira conexão, o macOS pergunta se o app pode encontrar e se conectar a dispositivos na rede
+local. Permita. Se a permissão for negada, o app explica o bloqueio no painel; para liberar, ative o
+app em Ajustes do Sistema → Privacidade e Segurança → Rede Local. Ao usar o `actool` ou o script de
+token, a permissão vale para o app de terminal.
 
 Com o firewall do macOS ativo, as respostas da busca de aparelhos chegam como conexões de entrada. Se
 o macOS perguntar, permita; se a busca não encontrar nada, confira o app (ou o `actool`) em Ajustes do
@@ -99,7 +136,7 @@ Sistema → Rede → Firewall → Opções.
 O `actool` usa a mesma biblioteca do app e lê o mesmo arquivo de configuração:
 
 ```sh
-SCRATCH=~/Library/Caches/guicondicionado-build
+SCRATCH=~/Library/Caches/ac-menubar-build
 swift build --scratch-path $SCRATCH --product actool
 alias actool="$(swift build --scratch-path $SCRATCH --show-bin-path)/actool"
 
@@ -117,13 +154,14 @@ descoberta mostra os envios e respostas.
 | Caminho | Conteúdo |
 |---|---|
 | `Sources/MideaKit` | Protocolo Midea V3 em Swift, portado do msmart-ng: descoberta, criptografia, pacotes, sessão TCP e configuração |
-| `Sources/GuiCondicionado` | App SwiftUI da barra de menus |
+| `Sources/ACMenubar` | App SwiftUI da barra de menus |
 | `Sources/actool` | CLI de desenvolvimento |
 | `Tests/MideaKitTests` | Testes; `Vectors.json` traz vetores gerados pelo msmart-ng |
 | `tools/gen_vectors.py` | Gera `Vectors.json` a partir de dados fixos e sintéticos, sem precisar de um aparelho |
 | `tools/get-token.command`, `tools/get_token.py` | Busca o token e a chave e grava a configuração |
 | `tools/make_icon.swift` | Gera o ícone e a marca em `Resources/Brand` |
-| `scripts/build-app.sh` | Compila, assina e instala o app |
+| `tools/screenshots.sh` | Gera as imagens deste README em `docs/screenshots` |
+| `scripts/build-app.sh` | Compila, nomeia, assina e instala o app |
 | `DESIGN.md` | Guia de design: componentes, estados, textos, comportamento na barra de menus e regras de desempenho |
 
 Para regenerar os vetores de teste:
@@ -133,8 +171,8 @@ uvx --from msmart-ng==2026.9.0 python -I tools/gen_vectors.py > Tests/MideaKitTe
 ```
 
 Antes de mudar a interface, leia o [DESIGN.md](DESIGN.md). A seção 9 explica como adicionar aparelhos
-e controles e como conferir o resultado com snapshots (`GuiCondicionado --snapshot out.png`), sem
-aparelho nem rede.
+e controles e como conferir o resultado com snapshots (`ac-menubar --snapshot out.png`), sem aparelho
+nem rede. Depois de mudar o visual, rode `tools/screenshots.sh` para atualizar as imagens acima.
 
 ## Créditos
 

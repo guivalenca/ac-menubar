@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.guilhermevalenca.guicondicionado</string>
+	<string>local.ac-menubar</string>
 	<key>CFBundleName</key>
-	<string>GuiCondicionado</string>
+	<string>ac-menubar</string>
 	<key>CFBundleDisplayName</key>
-	<string>GuiCondicionado</string>
+	<string>ac-menubar</string>
 	<key>CFBundleExecutable</key>
-	<string>GuiCondicionado</string>
+	<string>ac-menubar</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -23,6 +23,6 @@
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>O GuiCondicionado conversa com o seu ar-condicionado pela rede da sua casa.</string>
+	<string>ac-menubar conversa com o seu ar-condicionado pela rede da sua casa.</string>
 </dict>
 </plist>

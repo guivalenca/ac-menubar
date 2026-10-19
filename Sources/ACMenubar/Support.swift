@@ -22,6 +22,15 @@ enum Format {
     }
 }
 
+enum AppInfo {
+    /// The name chosen at build time (`scripts/build-app.sh --name`), from the bundle's Info.plist.
+    /// A bare binary, as in snapshots, has none.
+    static let name: String = {
+        let info = Bundle.main.infoDictionary ?? [:]
+        return info["CFBundleDisplayName"] as? String ?? info["CFBundleName"] as? String ?? "ac-menubar"
+    }()
+}
+
 enum LoginItem {
     static var isEnabled: Bool { SMAppService.mainApp.status == .enabled }
 
@@ -33,14 +42,15 @@ enum LoginItem {
                 try SMAppService.mainApp.register()
             }
         } catch {
-            NSLog("GuiCondicionado: login item change failed: \(error)")
+            NSLog("\(AppInfo.name): login item change failed: \(error)")
         }
     }
 }
 
-/// `GuiCondicionado --snapshot out.png [--dark] [--scenario on|off|connecting|offline|permission]` renders
-/// the panel with sample data and exits, before any store or scene exists (for development and design
-/// reviews). `--off` is short for `--scenario off`.
+/// `ac-menubar --snapshot out.png [--dark] [--framed] [--scenario on|off|connecting|offline|permission]`
+/// renders the panel with sample data and exits, before any store or scene exists (for development and
+/// design reviews). `--off` is short for `--scenario off`. `--framed` draws it as a floating panel, with
+/// rounded corners and a shadow on a transparent background (the README screenshots).
 @MainActor
 enum Snapshot {
     enum Scenario: String, CaseIterable {
@@ -59,10 +69,22 @@ enum Snapshot {
         }
 
         let scheme: ColorScheme = args.contains("--dark") ? .dark : .light
-        let view = PanelView()
+        let panel = PanelView()
             .environmentObject(store(for: scenario))
             .background(Color(nsColor: .windowBackgroundColor))
-            .environment(\.colorScheme, scheme)
+        let corner = RoundedRectangle(cornerRadius: 12, style: .continuous)
+        let view = Group {
+            if args.contains("--framed") {
+                panel
+                    .clipShape(corner)
+                    .overlay(corner.strokeBorder(Color.primary.opacity(0.12), lineWidth: 0.5))
+                    .shadow(color: .black.opacity(0.22), radius: 18, y: 8)
+                    .padding(36)
+            } else {
+                panel
+            }
+        }
+        .environment(\.colorScheme, scheme)
         let renderer = ImageRenderer(content: view)
         renderer.scale = 2
         guard let image = renderer.nsImage, let tiff = image.tiffRepresentation,

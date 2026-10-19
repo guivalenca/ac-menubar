@@ -1,4 +1,4 @@
-// GuiCondicionado brand generator.
+// ac-menubar brand generator.
 //
 // One set of shapes drives every output, so the PNGs and the SVGs can't drift apart:
 //   Resources/Brand/icon.svg, wordmark.svg, glyph.svg
@@ -510,8 +510,8 @@ func wordmarkLine() -> TextLine {
     let cap = brandFont(size: wmFontSize, weight: 300).capHeight
     let x = wmPad + wmMark.bounds.width * wmMarkScale + wmGap
     return TextLine(origin: P(x: x, y: (wmHeight / 2 + cap / 2).rounded()), size: wmFontSize, tracking: wmTracking, runs: [
-        TextRun(text: "Gui", weight: 500),
-        TextRun(text: "Condicionado", weight: 300),
+        TextRun(text: "ac", weight: 500),
+        TextRun(text: "-menubar", weight: 300),
     ])
 }
 
@@ -547,7 +547,7 @@ func wordmarkSVG() -> String {
     let mark = wmMark.items(.ink(black)).map { svg.element($0) }.joined(separator: "\n    ")
     let style = "svg { color: \(black.hex) } @media (prefers-color-scheme: dark) { svg { color: \(white.hex) } }"
     return svg.document(width: w, height: wmHeight, viewBox: CGRect(x: 0, y: 0, width: w, height: wmHeight),
-                        title: "GuiCondicionado", style: style,
+                        title: "ac-menubar", style: style,
                         body: ["<g transform=\"matrix(\(f(t.a)) 0 0 \(f(t.d)) \(f(t.tx)) \(f(t.ty)))\">\n    \(mark)\n  </g>",
                                svg.text(wordmarkLine(), fontFamily: fontFamily)])
 }
@@ -569,11 +569,11 @@ do {
     let svg = SVG(prefix: "g")
     let body = iconItems(pixels: 1024).map { svg.element($0) }
     try svg.document(width: 1024, height: 1024, viewBox: CGRect(x: 0, y: 0, width: 1024, height: 1024),
-                     title: "GuiCondicionado", body: body)
+                     title: "ac-menubar", body: body)
         .write(to: brand.appendingPathComponent("icon.svg"), atomically: true, encoding: .utf8)
 
     let gsvg = SVG(prefix: "m")
-    try gsvg.document(width: 64, height: 64, viewBox: glyphBox, title: "GuiCondicionado glyph",
+    try gsvg.document(width: 64, height: 64, viewBox: glyphBox, title: "ac-menubar glyph",
                       body: glyphMark.items(.solid(RGBA(0x000000))).map { gsvg.element($0) })
         .write(to: brand.appendingPathComponent("glyph.svg"), atomically: true, encoding: .utf8)
 
@@ -588,7 +588,7 @@ writePNG(wordmarkImage(ink: black, scale: 2), pngDir.appendingPathComponent("wor
 writePNG(wordmarkImage(ink: white, scale: 2), pngDir.appendingPathComponent("wordmark-dark@2x.png"), dpi: 144)
 
 // .icns
-let work = fm.temporaryDirectory.appendingPathComponent("guicondicionado-\(UUID().uuidString)", isDirectory: true)
+let work = fm.temporaryDirectory.appendingPathComponent("ac-menubar-\(UUID().uuidString)", isDirectory: true)
 let iconset = work.appendingPathComponent("AppIcon.iconset", isDirectory: true)
 try fm.createDirectory(at: iconset, withIntermediateDirectories: true)
 defer { try? fm.removeItem(at: work) }

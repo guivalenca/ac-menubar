@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 @main
-struct GuiCondicionadoApp: App {
+struct ACMenubarApp: App {
     // The App must not observe ACStore: every store change would re-evaluate the scene, and
     // MenuBarExtra writes its isInserted binding back during that evaluation. Observing only
     // MenuBarVisibility, which ignores same-value writes, keeps that from turning into a loop.

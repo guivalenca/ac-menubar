@@ -118,7 +118,7 @@ struct PanelView: View {
             .item("Bipe ao alterar", checked: store.beepEnabled) { store.beepEnabled.toggle() },
             .item("Abrir ao iniciar o Mac", checked: LoginItem.isEnabled) { LoginItem.toggle() },
             .separator,
-            .item("Sair do GuiCondicionado") { NSApp.terminate(nil) },
+            .item("Sair do \(AppInfo.name)") { NSApp.terminate(nil) },
         ])
     }
 }
@@ -292,7 +292,7 @@ private struct LocalNetworkNotice: View {
 
     var body: some View {
         Notice(symbol: "lock.shield", title: "Sem acesso à rede local",
-               message: "O macOS bloqueou a conexão com o ar. Em Ajustes do Sistema → Privacidade e Segurança → Rede Local, ative o GuiCondicionado. Se uma VPN estiver ligada, desligue-a.",
+               message: "O macOS bloqueou a conexão com o ar. Em Ajustes do Sistema → Privacidade e Segurança → Rede Local, ative o \(AppInfo.name). Se uma VPN estiver ligada, desligue-a.",
                warning: true) {
             CapsuleButton(title: "Abrir Ajustes") { NSWorkspace.shared.open(Self.settingsURL) }
             CapsuleButton(title: "Tentar de novo", prominent: false, action: onRetry)

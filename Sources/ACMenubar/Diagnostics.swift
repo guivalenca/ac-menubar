@@ -1,11 +1,11 @@
 import Darwin
 import Foundation
 
-/// Tiny append-only log at ~/Library/Logs/GuiCondicionado.log for diagnosing network issues.
+/// Tiny append-only log at ~/Library/Logs/ac-menubar.log for diagnosing network issues.
 enum Log {
     static let directory = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Logs")
-    private static let queue = DispatchQueue(label: "guicondicionado.log")
-    private static let url = directory.appendingPathComponent("GuiCondicionado.log")
+    private static let queue = DispatchQueue(label: "ac-menubar.log")
+    private static let url = directory.appendingPathComponent("ac-menubar.log")
 
     static func write(_ message: String) {
         let line = "\(ISO8601DateFormatter().string(from: Date())) \(message)\n"
@@ -32,7 +32,7 @@ enum Log {
 ///   minutes);
 /// - CPU: the process has stayed over 90% of one core for 60 s, a spin that doesn't grow memory.
 /// The sample, a second of call stacks from `/usr/bin/sample`, goes to
-/// ~/Library/Logs/GuiCondicionado-sample.txt and shows where the app was stuck.
+/// ~/Library/Logs/ac-menubar-sample.txt and shows where the app was stuck.
 enum Watchdog {
     static let interval: TimeInterval = 5
     /// Lets macOS batch the wake-ups with other timers.
@@ -44,7 +44,7 @@ enum Watchdog {
     static let sampleDuration = 1
     /// How long to wait for `sample` before quitting anyway.
     static let sampleTimeout: TimeInterval = 3
-    static let sampleURL = Log.directory.appendingPathComponent("GuiCondicionado-sample.txt")
+    static let sampleURL = Log.directory.appendingPathComponent("ac-menubar-sample.txt")
 
     /// State for the checks, only touched on the timer's queue.
     private final class Checks: @unchecked Sendable {
@@ -53,7 +53,7 @@ enum Watchdog {
 
     private static let timer: DispatchSourceTimer = {
         let checks = Checks()
-        let timer = DispatchSource.makeTimerSource(queue: DispatchQueue(label: "guicondicionado.watchdog", qos: .utility))
+        let timer = DispatchSource.makeTimerSource(queue: DispatchQueue(label: "ac-menubar.watchdog", qos: .utility))
         timer.schedule(deadline: .now() + interval, repeating: interval, leeway: leeway)
         timer.setEventHandler {
             if let footprint = physicalFootprint(), footprint > memoryLimit {

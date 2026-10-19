@@ -1,6 +1,6 @@
-# GuiCondicionado design guide
+# ac-menubar design guide
 
-GuiCondicionado is a SwiftUI menu bar app for macOS 15+ that controls a Midea air conditioner over the
+ac-menubar is a SwiftUI menu bar app for macOS 15+ that controls a Midea air conditioner over the
 home LAN. The UI is in Brazilian Portuguese. This guide keeps new rooms, devices and controls
 consistent with what exists. Every rule is meant to be checkable against the code or a snapshot.
 
@@ -219,7 +219,7 @@ trailing. Status variants:
 `.offline(msg)` → `warning` `exclamationmark.circle.fill` + the message in `footerStrong`.
 Notices pass no status, because the card already explains it, but keep the gear so "Sair" is always
 reachable. The settings menu holds app-level items only: "Atualizar agora", "Bipe ao alterar",
-"Abrir ao iniciar o Mac", "Sair do GuiCondicionado".
+"Abrir ao iniciar o Mac", "Sair do <nome do app>".
 
 **Notice** (`PanelView.swift:222`). A full-width card that replaces the grid when there is no state to
 show: an orb (`warning` glyph for problems, `.secondary` while connecting, pulsing while busy), a 13
@@ -233,7 +233,7 @@ semibold title, a 12 pt body, then up to two `CapsuleButton`s.
 | Situation | What the panel shows | Copy |
 |---|---|---|
 | Config missing / invalid | `Notice` `exclamationmark.triangle`, no header | "Configuração" + "Nenhum ar-condicionado configurado." or "Não encontrei a configuração em ~/.config/ac-menubar/config.json." |
-| Local Network blocked (`Sync.blocked`) | `Notice` `lock.shield` + "Abrir Ajustes" (opens Privacy_LocalNetwork) and "Tentar de novo" | "Sem acesso à rede local" / "O macOS bloqueou a conexão com o ar. Em Ajustes do Sistema → Privacidade e Segurança → Rede Local, ative o GuiCondicionado. Se uma VPN estiver ligada, desligue-a." |
+| Local Network blocked (`Sync.blocked`) | `Notice` `lock.shield` + "Abrir Ajustes" (opens Privacy_LocalNetwork) and "Tentar de novo" | "Sem acesso à rede local" / "O macOS bloqueou a conexão com o ar. Em Ajustes do Sistema → Privacidade e Segurança → Rede Local, ative o <nome do app>. Se uma VPN estiver ligada, desligue-a." |
 | First load | `Notice` `air.conditioner.horizontal`, pulsing | "Conectando…" / "Falando com o ar-condicionado." |
 | First load failed | `Notice` `wifi.exclamationmark` + "Tentar de novo" | "Sem conexão" + offline message |
 | Has state, write or poll failed | the grid stays; the footer shows an orange icon and the message | offline message (below) |
@@ -275,7 +275,10 @@ isn't an offline message: it sets `Sync.blocked`, which shows the Local Network 
   in short steps: "O macOS bloqueou a conexão com o ar. … Se uma VPN estiver ligada, desligue-a."
   Full sentences end with a period; labels, titles and buttons don't.
 - **Buttons and menu items start with an infinitive verb**: "Abrir Ajustes", "Atualizar agora",
-  "Sair do GuiCondicionado". Tooltips name the action, not the state: "Ligar" / "Desligar".
+  "Sair do <nome do app>". Tooltips name the action, not the state: "Ligar" / "Desligar".
+- **The app's name is per user.** Each person picks it with `scripts/build-app.sh --name` (default
+  "ac-menubar"), so never write a name into a string: use `AppInfo.name` (`Support.swift`), which
+  reads the bundle's display name.
 - **Progress** uses the single ellipsis character: "Sincronizando…", "Conectando…". Unknown values
   use an em dash "—".
 - **Numbers** always go through `Format` (`Support.swift:6`): the value rounds to the nearest 0.5,
@@ -360,14 +363,14 @@ isn't an offline message: it sets `Sync.blocked`, which shows the Local Network 
 - **Template rendering.** The menu bar renders the label as a monochrome template that follows the
   menu bar appearance. Don't apply colors, palette rendering or symbol effects to it.
 - **No Dock icon, no app menu.** `LSUIElement = true` (`Resources/Info.plist:21`). Quitting is
-  "Sair do GuiCondicionado" in the footer menu.
+  "Sair do <nome do app>" in the footer menu.
 - **One item total**, even with several devices (§9).
 
 ## 8. Performance rules for UI code
 
 The app once hit a runaway SwiftUI update loop that grew it to **19 GB**. These rules are mandatory.
 
-1. **The App body must not observe the main store.** `GuiCondicionadoApp` holds `ACStore.shared` as
+1. **The App body must not observe the main store.** `ACMenubarApp` holds `ACStore.shared` as
    a plain `let` and observes only `MenuBarVisibility`, a tiny object that publishes the
    `isInserted` Bool. Only views that render state (`PanelView`, `MenuBarLabel`) observe a store.
 2. **Bindings handed to SwiftUI ignore same-value writes.** `MenuBarExtra(isInserted:)` writes back
@@ -393,9 +396,9 @@ The app once hit a runaway SwiftUI update loop that grew it to **19 GB**. These 
 6. **Watchdog.** `Watchdog` (`Diagnostics.swift`) checks every 5 s on its own queue (2 s leeway), so
    a stuck main thread can't stall it. It calls `exit(1)` when the physical footprint passes
    **1 GB**, or when the app has used over **90% of a core for 60 s** straight, a spin that doesn't
-   allocate. Before quitting it logs to `~/Library/Logs/GuiCondicionado.log` and writes a one-second
+   allocate. Before quitting it logs to `~/Library/Logs/ac-menubar.log` and writes a one-second
    stack sample (`/usr/bin/sample`, waiting at most 3 s) to
-   `~/Library/Logs/GuiCondicionado-sample.txt`, which shows where the app was stuck. The thresholds
+   `~/Library/Logs/ac-menubar-sample.txt`, which shows where the app was stuck. The thresholds
    are constants on `Watchdog`. It's a seatbelt, not a fix: if it fires, find the loop.
 7. **Repeating effects only while the panel is on screen.** `MenuBarExtra` keeps the panel's window
    alive after it closes, so a repeating `symbolEffect` keeps rendering behind it: a hidden spinning
@@ -404,7 +407,7 @@ The app once hit a runaway SwiftUI update loop that grew it to **19 GB**. These 
    (`Components.swift:91`). `PanelView` sets it from the window's occlusion state through
    `OnScreenReader` (`Components.swift:528`). Don't start any other repeating animation without it.
 8. **Check it:** leave the app running for 10 minutes with the panel open, then closed;
-   `footprint GuiCondicionado` should stay flat; a steadily climbing
+   `footprint <nome do app>` should stay flat; a steadily climbing
    footprint means an update loop.
 
 ## 9. Extending the app
@@ -453,17 +456,19 @@ The app once hit a runaway SwiftUI update loop that grew it to **19 GB**. These 
 **Verify with snapshots** (no device or network needed; `ACStore(preview:)` never connects):
 
 ```sh
-GuiCondicionado --snapshot out.png [--dark] [--scenario on|off|connecting|offline|permission]
+ac-menubar --snapshot out.png [--dark] [--framed] [--scenario on|off|connecting|offline|permission]
 ```
 
-`Snapshot` (`Support.swift:45`) renders `PanelView` with sample data, writes the PNG and exits before
+`Snapshot` (`Support.swift:55`) renders `PanelView` with sample data, writes the PNG and exits before
 any store or scene exists.
 - **Scenarios:** `on` (the default), `off` (`--off` is an alias), `connecting` (no state, so the
   "Conectando…" notice), `offline` (the grid stays, the footer says "O ar não respondeu." and
   "Atualizado há 5 min") and `permission` (the Local Network notice). An unknown name exits with
   status 1 and lists the valid ones. No scenario shows the setup error or the first-load-failed notice
   (§4); add one to `Snapshot.Scenario` when you change them.
-- **Flags:** `--dark` renders the dark appearance, otherwise light.
+- **Flags:** `--dark` renders the dark appearance, otherwise light. `--framed` draws a floating panel
+  (12 pt continuous corners, hairline border, shadow, 36 pt transparent margin, so 880 px wide); the
+  README images come from `tools/screenshots.sh`, which uses it.
 - **Sample state:** room "Sala", 21°, Refrigerar, Ventilação Automática, Direção do ar Vertical, Eco on
   (Turbo and Dormir off), 23° inside, 18,5° outside. Power is on, except in `off`.
 - **Output:** 2× scale on a flat `windowBackgroundColor`, not the panel's material. The panel is
@@ -503,7 +508,7 @@ Reduce Motion and the on-screen gating in the running app.
 
 ## Open design questions
 
-1. **No keyboard path to the setpoint.** Nothing in `Sources/GuiCondicionado` uses `.focusable` or
+1. **No keyboard path to the setpoint.** Nothing in `Sources/ACMenubar` uses `.focusable` or
    `.onKeyPress`, so the arrow keys can't change the temperature; only the pointer and VoiceOver's
    adjustable action can (`Components.swift:369` and `:391`). Make `TemperatureSlider` focusable and
    step on up and down arrows through `onStep`.

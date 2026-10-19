@@ -2,16 +2,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "GuiCondicionado",
+    name: "ac-menubar",
     platforms: [.macOS(.v15)],
     products: [
-        .executable(name: "GuiCondicionado", targets: ["GuiCondicionado"]),
+        .executable(name: "ac-menubar", targets: ["ACMenubar"]),
         .executable(name: "actool", targets: ["actool"]),
         .library(name: "MideaKit", targets: ["MideaKit"]),
     ],
     targets: [
         .target(name: "MideaKit"),
-        .executableTarget(name: "GuiCondicionado", dependencies: ["MideaKit"]),
+        .executableTarget(name: "ACMenubar", dependencies: ["MideaKit"]),
         .executableTarget(name: "actool", dependencies: ["MideaKit"]),
         .testTarget(
             name: "MideaKitTests",

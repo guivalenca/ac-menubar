@@ -1,5 +1,5 @@
 """Fetch a Midea V3 unit's token and key from the user's own SmartHome (MSmartHome) account and save
-them to ~/.config/ac-menubar/config.json, the file GuiCondicionado and actool read.
+them to ~/.config/ac-menubar/config.json, the file the app and actool read.
 
 tools/get-token.command asks for the credentials and runs this script:
 
@@ -315,7 +315,7 @@ async def choose(unit: dict, candidates: dict[str, tuple[str, str]]) -> tuple[st
             print("O aparelho aceitou a chave.")
             return candidates[endian]
 
-    print("O aparelho recusou as chaves recebidas. Se o GuiCondicionado estiver aberto, feche-o e tente de novo.")
+    print("O aparelho recusou as chaves recebidas. Se o app da barra de menus estiver aberto, feche-o e tente de novo.")
     if confirm("Salvar mesmo assim a opção mais provável?", default=False):
         return candidates[unique[0]]
     raise Abort("Nada foi salvo.")
